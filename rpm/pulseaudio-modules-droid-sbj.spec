@@ -1,5 +1,5 @@
 %define device sbj
-%define pulseversion 5.0
+%define pulseversion 6.0
 
 Name:       pulseaudio-modules-droid-%{device}
 
@@ -28,6 +28,7 @@ PulseAudio Droid HAL modules.
 %setup -q -n %{name}-%{version}
 
 %build
+echo "%{version}" > .tarball-version
 %reconfigure --disable-static --with-droid-device=%{device}
 make %{?jobs:-j%jobs}
 

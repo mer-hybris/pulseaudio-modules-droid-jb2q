@@ -1,4 +1,4 @@
-%define pulseversion 5.0
+%define pulseversion 6.0
 
 Name:       pulseaudio-modules-droid
 
@@ -26,6 +26,7 @@ PulseAudio Droid HAL modules.
 %setup -q -n %{name}-%{version}
 
 %build
+echo "%{version}" > .tarball-version
 # Obtain the DEVICE from the same source as used in /etc/os-release
 . /usr/lib/droid-devel/hw-release.vars
 %reconfigure --disable-static --with-droid-device=$MER_HA_DEVICE
