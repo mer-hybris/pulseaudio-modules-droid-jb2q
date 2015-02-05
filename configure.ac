@@ -1,14 +1,14 @@
 AC_PREREQ(2.60)
 
-m4_define(PA_MAJOR, [5])
-m4_define(PA_MINOR, [0])
-m4_define(NEMO_MICRO, [33])
-
-AC_INIT([pulseaudio-modules-droid], [PA_MAJOR.PA_MINOR.NEMO_MICRO], [mer-general@lists.merproject.org])
+AC_INIT([pulseaudio-modules-droid], [m4_esyscmd(./git-version-gen .tarball-version)], [mer-general@lists.merproject.org])
 AC_CONFIG_HEADER([config.h])
 AM_INIT_AUTOMAKE([foreign -Wall silent-rules])
 AC_CONFIG_MACRO_DIR(m4)
 AM_SILENT_RULES([yes])
+
+AS_IF([! test -n "$VERSION"], [
+   AC_MSG_ERROR([git-version-gen failed])
+])
 
 if type -p stow > /dev/null && test -d /usr/local/stow ; then
    AC_MSG_NOTICE([*** Found /usr/local/stow: default install prefix set to /usr/local/stow/${PACKAGE_NAME}-${PACKAGE_VERSION} ***])
@@ -19,6 +19,9 @@ AC_PROG_CC
 AC_PROG_CC_C99
 AM_PROG_CC_C_O
 AC_PROG_GCC_TRADITIONAL
+
+m4_define(PA_MAJOR, `echo $VERSION | cut -d. -f1 | cut -d- -f1`)
+m4_define(PA_MINOR, `echo $VERSION | cut -d. -f2 | cut -d- -f1`)
 
 AC_SUBST(PA_MAJORMINOR, PA_MAJOR.PA_MINOR)
 
