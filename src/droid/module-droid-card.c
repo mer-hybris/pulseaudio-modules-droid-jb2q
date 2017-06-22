@@ -692,14 +692,17 @@ int pa__init(pa_module *m) {
     u->core = m->core;
     m->userdata = u;
 
-    if (!(config = pa_droid_config_load(ma)))
-        goto fail;
 
     module_id = pa_modargs_get_value(ma, "module_id", DEFAULT_MODULE_ID);
 
-    /* Ownership of config transfers to hw_module if opening of hw module succeeds. */
-    if (!(u->hw_module = pa_droid_hw_module_get(u->core, config, module_id)))
-        goto fail;
+    if (!(u->hw_module = pa_droid_hw_module_get(u->core, NULL, module_id))) {
+        if (!(config = pa_droid_config_load(ma)))
+            goto fail;
+
+        /* Ownership of config transfers to hw_module if opening of hw module succeeds. */
+        if (!(u->hw_module = pa_droid_hw_module_get(u->core, config, module_id)))
+            goto fail;
+    }
 
     if ((quirks = pa_modargs_get_value(ma, "quirks", NULL))) {
         if (!pa_droid_quirk_parse(u->hw_module, quirks)) {
@@ -826,7 +829,10 @@ int pa__init(pa_module *m) {
     u->modargs = ma;
     u->module = m;
 
+    pa_card_choose_initial_profile(u->card);
     init_profile(u);
+
+    pa_card_put(u->card);
 
     return 0;
 
