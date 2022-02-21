@@ -1,10 +1,15 @@
-PulseAudio Droid modules
-========================
+PulseAudio Droid modules jb2q
+=============================
+
+For **Android 11+** modules see [pulseaudio-modules-droid](https://github.com/mer-hybris/pulseaudio-modules-droid).
 
 Building of droid modules is split to two packages
 * **common** (and **common-devel**) which contains shared library code for use in
   PulseAudio modules in this package and for inclusion in other projects
 * **droid** with actual PulseAudio modules
+
+Linking to libdroid is **not encouraged**, usually only HAL functions are needed
+which can be accessed using the pulsecore shared API (see below).
 
 Supported Android versions:
 
