@@ -65,7 +65,7 @@
 #include "droid-source.h"
 
 PA_MODULE_AUTHOR("Juho Hämäläinen");
-PA_MODULE_DESCRIPTION("Droid card");
+PA_MODULE_DESCRIPTION("Droid card jb2q");
 PA_MODULE_VERSION(PACKAGE_VERSION);
 PA_MODULE_USAGE(
         "card_name=<name for the card> "
@@ -729,7 +729,7 @@ int pa__init(pa_module *m) {
 
     pa_assert(m);
 
-    pa_log_info("Create new droid-card");
+    pa_log_info("Create new droid-card-jb2q");
 
     if (!(ma = pa_modargs_new(m->argument, valid_modargs))) {
         pa_log("Failed to parse module arguments.");

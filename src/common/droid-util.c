@@ -998,7 +998,7 @@ static pa_droid_hw_module *droid_hw_module_open(pa_core *core, const pa_droid_co
         goto fail;
     }
 
-    pa_log_info("Droid hw module %s", VERSION);
+    pa_log_info("Droid-jb2q hw module %s", VERSION);
 
     if (!(module = pa_droid_config_find_module(config, module_id))) {
         pa_log("Couldn't find module with id %s", module_id);

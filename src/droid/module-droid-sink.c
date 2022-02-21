@@ -42,7 +42,7 @@
 #include "droid-sink.h"
 
 PA_MODULE_AUTHOR("Juho Hämäläinen");
-PA_MODULE_DESCRIPTION("Droid sink");
+PA_MODULE_DESCRIPTION("Droid sink jb2q");
 PA_MODULE_USAGE("master_sink=<sink to connect to> "
                 "sink_name=<name of created sink>");
 PA_MODULE_VERSION(PACKAGE_VERSION);

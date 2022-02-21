@@ -1,6 +1,6 @@
 AC_PREREQ(2.60)
 
-AC_INIT([pulseaudio-modules-droid], [m4_esyscmd(./git-version-gen .tarball-version)], [mer-general@lists.merproject.org])
+AC_INIT([pulseaudio-modules-droid-jb2q], [m4_esyscmd(./git-version-gen .tarball-version)], [mer-general@lists.merproject.org])
 AC_CONFIG_HEADER([config.h])
 AM_INIT_AUTOMAKE([foreign -Wall silent-rules])
 AC_CONFIG_MACRO_DIR(m4)

@@ -1074,7 +1074,7 @@ pa_sink *pa_droid_sink_new(pa_module *m,
     pa_assert(ma);
     pa_assert(driver);
 
-    pa_log_info("Create new droid-sink");
+    pa_log_info("Create new droid-sink-jb2q");
 
     deferred_volume = m->core->deferred_volume;
     if (pa_modargs_get_value_boolean(ma, "deferred_volume", &deferred_volume) < 0) {
@@ -1218,7 +1218,7 @@ pa_sink *pa_droid_sink_new(pa_module *m,
     u->write_threshold = u->buffer_time - u->buffer_time / 6;
 
     pa_silence_memchunk_get(&u->core->silence_cache, u->core->mempool, &u->silence, &u->stream->output->sample_spec, u->buffer_size);
-    u->memblockq = pa_memblockq_new("droid-sink", 0, u->buffer_size, u->buffer_size, &u->stream->output->sample_spec, 1, 0, 0, &u->silence);
+    u->memblockq = pa_memblockq_new("droid-sink-jb2q", 0, u->buffer_size, u->buffer_size, &u->stream->output->sample_spec, 1, 0, 0, &u->silence);
 
     pa_sink_new_data_init(&data);
     data.driver = driver;
@@ -1289,7 +1289,7 @@ pa_sink *pa_droid_sink_new(pa_module *m,
     /* Rewind internal memblockq */
     pa_sink_set_max_rewind(u->sink, 0);
 
-    thread_name = pa_sprintf_malloc("droid-sink-%s", output->name);
+    thread_name = pa_sprintf_malloc("droid-sink-jb2q-%s", output->name);
     if (!(u->thread = pa_thread_new(thread_name, thread_func, u))) {
         pa_log("Failed to create thread.");
         goto fail;
