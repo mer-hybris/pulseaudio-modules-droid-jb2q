@@ -5,7 +5,7 @@
 Name:       pulseaudio-modules-droid-jb2q
 
 Summary:    PulseAudio Droid HAL modules
-Version:    %{pulsemajorminor}.96
+Version:    %{pulsemajorminor}.97
 Release:    1
 License:    LGPLv2+
 URL:        https://github.com/mer-hybris/pulseaudio-modules-droid-jb2q
@@ -20,7 +20,8 @@ BuildRequires:  pkgconfig(pulsecore) >= %{pulsemajorminor}
 BuildRequires:  pkgconfig(android-headers)
 BuildRequires:  pkgconfig(libhardware)
 BuildRequires:  pkgconfig(expat)
-Provides:   pulseaudio-modules-droid
+Provides:   pulseaudio-modules-droid = %{version}
+Obsoletes:  pulseaudio-modules-droid <= 14.2.95
 
 %description
 PulseAudio Droid HAL modules, supports Android versions from 4 to 10.
