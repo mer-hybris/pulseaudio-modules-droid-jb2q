@@ -569,7 +569,7 @@ pa_source *pa_droid_source_new(pa_module *m,
     pa_assert(ma);
     pa_assert(driver);
 
-    pa_log_info("Create new droid-source");
+    pa_log_info("Create new droid-source-jb2q");
 
     /* When running under card use hw module name for source by default. */
     if (am)
@@ -731,7 +731,7 @@ pa_source *pa_droid_source_new(pa_module *m,
     /* Disable rewind for droid source */
     pa_source_set_max_rewind(u->source, 0);
 
-    thread_name = pa_sprintf_malloc("droid-source-%s", module_id);
+    thread_name = pa_sprintf_malloc("droid-source-jb2q-%s", module_id);
     if (!(u->thread = pa_thread_new(thread_name, thread_func, u))) {
         pa_log("Failed to create thread.");
         goto fail;
