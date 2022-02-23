@@ -29,6 +29,8 @@ PulseAudio Droid HAL modules, supports Android versions from 4 to 10.
 %package common
 Summary:    Common libs for the PulseAudio droid modules
 Requires:   pulseaudio >= %{pulseversion}
+Provides:   pulseaudio-modules-droid-common = %{version}
+Obsoletes:  pulseaudio-modules-droid-common <= 14.2.95
 
 %description common
 This contains common libs for the PulseAudio droid modules.
@@ -37,6 +39,8 @@ This contains common libs for the PulseAudio droid modules.
 Summary:    Development files for PulseAudio droid modules
 Requires:   %{name}-common = %{version}-%{release}
 Requires:   pulseaudio >= %{pulseversion}
+Provides:   pulseaudio-modules-droid-devel = %{version}
+Obsoletes:  pulseaudio-modules-droid-devel <= 14.2.95
 
 %description devel
 This contains development files for PulseAudio droid modules.
