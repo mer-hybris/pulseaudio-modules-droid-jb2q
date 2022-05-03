@@ -14,9 +14,8 @@ Source0:    %{name}-%{version}.tar.bz2
 Requires:   pulseaudio >= %{pulseversion}
 Requires:   %{name}-common = %{version}-%{release}
 Requires:   pulseaudio-module-keepalive >= 1.0.0
-BuildRequires:  automake
-BuildRequires:  libtool
 BuildRequires:  libtool-ltdl-devel
+BuildRequires:  meson
 BuildRequires:  pkgconfig(pulsecore) >= %{pulsemajorminor}
 BuildRequires:  pkgconfig(android-headers)
 BuildRequires:  pkgconfig(libhardware)
@@ -45,12 +44,11 @@ This contains development files for PulseAudio droid modules.
 
 %build
 echo "%{moduleversion}" > .tarball-version
-%reconfigure --disable-static --with-droid-device=%{device} --disable-xml
-make %{?jobs:-j%jobs}
+%meson -Ddroid-device=$MER_HA_DEVICE -Dxml=false
+%meson_build
 
 %install
-rm -rf %{buildroot}
-%make_install
+%meson_install
 
 %files
 %defattr(-,root,root,-)

@@ -1,18 +1,18 @@
 libdroid_util_sources = [
-  'droid-util.c',
-  'droid-config.c',
-  'conversion.c',
   'config-parser-legacy.c',
   'config-parser-xml.c',
+  'conversion.c',
+  'droid-config.c',
+  'droid-util.c',
   'droid-util-audio.h',
   'droid-util-41qc.h',
 ]
 
 libdroid_util_headers = [
-  'include/droid/version.h',
   'include/droid/conversion.h',
   'include/droid/droid-config.h',
   'include/droid/droid-util.h',
+  'include/droid/version.h',
 ]
 
 libdroid_util_deps = [
