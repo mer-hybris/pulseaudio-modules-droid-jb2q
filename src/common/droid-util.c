@@ -90,6 +90,7 @@ struct droid_quirk valid_quirks[] = {
     { "audio_cal_wait",         QUIRK_AUDIO_CAL_WAIT        },
     { "standby_set_route",      QUIRK_STANDBY_SET_ROUTE     },
     { "speaker_before_voice",   QUIRK_SPEAKER_BEFORE_VOICE  },
+    { "swap_headphone_speaker", QUIRK_SWAP_HEADPHONE_SPEAKER},
 };
 
 #define QUIRK_AUDIO_CAL_WAIT_S  (10)
@@ -121,6 +122,8 @@ static void droid_port_free(pa_droid_port *p);
 static int input_stream_set_route(pa_droid_hw_module *hw_module, pa_droid_stream *s);
 static int droid_set_parameters(pa_droid_hw_module *hw, const char *parameters);
 static bool droid_set_audio_source(pa_droid_hw_module *hw_module, audio_source_t audio_source);
+
+static pa_droid_hw_module *hw_primary = NULL;
 
 static pa_droid_profile *profile_new(pa_droid_profile_set *ps,
                                      const pa_droid_config_hw_module *module,
@@ -445,15 +448,23 @@ static void add_o_ports(pa_droid_mapping *am) {
 
     devices = am->output->devices;
 
-    /* IHF combo devices, these devices are combined with IHF */
-    combo_devices = AUDIO_DEVICE_OUT_SPEAKER | AUDIO_DEVICE_OUT_WIRED_HEADPHONE;
+    /* IHF combo devices, these devices are combined with IHF, only if swap quirk is disabled. */
+    if (!pa_droid_quirk(hw_primary, QUIRK_SWAP_HEADPHONE_SPEAKER))
+        combo_devices = AUDIO_DEVICE_OUT_SPEAKER | AUDIO_DEVICE_OUT_WIRED_HEADPHONE;
 
     while (devices) {
         uint32_t cur_device = (1 << i++);
 
         if (devices & cur_device) {
 
-            pa_assert_se(pa_droid_output_port_name(cur_device, &name));
+            if (pa_droid_quirk(hw_primary, QUIRK_SWAP_HEADPHONE_SPEAKER) &&
+                cur_device & (AUDIO_DEVICE_OUT_WIRED_HEADPHONE | AUDIO_DEVICE_OUT_SPEAKER)) {
+                if (cur_device & AUDIO_DEVICE_OUT_WIRED_HEADPHONE)
+                    pa_assert_se(pa_droid_output_port_name(AUDIO_DEVICE_OUT_SPEAKER, &name));
+                else  /* cur_device & AUDIO_DEVICE_OUT_SPEAKER */
+                    pa_assert_se(pa_droid_output_port_name(AUDIO_DEVICE_OUT_WIRED_HEADPHONE, &name));
+            } else
+                pa_assert_se(pa_droid_output_port_name(cur_device, &name));
 
             if (!(p = pa_hashmap_get(am->profile_set->all_ports, name))) {
 
@@ -1056,9 +1067,10 @@ static pa_droid_hw_module *droid_hw_module_open(pa_core *core, const pa_droid_co
 
     pa_assert_se(pa_shared_set(core, hw->shared_name, hw) >= 0);
 
-    /* API for calling HAL functions from other modules. */
-
     if (pa_streq(hw->module_id, PA_DROID_PRIMARY_DEVICE)) {
+        hw_primary = hw;
+
+        /* API for calling HAL functions from other modules. */
         pa_shared_set(core, DROID_HW_HANDLE_V1, hw);
         pa_shared_set(core, DROID_SET_PARAMETERS_V1, droid_set_parameters_v1_cb);
         pa_shared_set(core, DROID_GET_PARAMETERS_V1, droid_get_parameters_v1_cb);
@@ -1187,6 +1199,9 @@ static void droid_hw_module_close(pa_droid_hw_module *hw) {
         pa_assert(pa_idxset_size(hw->inputs) == 0);
         pa_idxset_free(hw->inputs, NULL);
     }
+
+    if (hw_primary == hw)
+        hw_primary = NULL;
 
     pa_xfree(hw);
 }

@@ -86,6 +86,7 @@ struct userdata {
     pa_hook_slot *sink_unlink_hook_slot;
     pa_hook_slot *sink_port_changed_hook_slot;
     pa_sink *primary_stream_sink;
+    pa_time_event *refresh_time_event;
 
     audio_devices_t primary_devices;
     audio_devices_t extra_devices;
@@ -126,6 +127,8 @@ typedef struct droid_parameter_mapping {
  * sink-input's absolute volume is used for HAL voice volume. */
 #define DEFAULT_VOICE_CONTROL_PROPERTY_KEY      "media.role"
 #define DEFAULT_VOICE_CONTROL_PROPERTY_VALUE    "phone"
+
+#define REFRESH_TIME_US ((pa_usec_t) (10 * PA_USEC_PER_SEC))
 
 static void parameter_free(droid_parameter_mapping *m);
 static void userdata_free(struct userdata *u);
@@ -1043,6 +1046,19 @@ error:
     return false;
 }
 
+static void refresh_time_cb(pa_mainloop_api *a, pa_time_event *e, const struct timeval *t, void *userdata) {
+    struct userdata *u = userdata;
+
+    pa_assert(u->refresh_time_event);
+    pa_assert(u->refresh_time_event == e);
+
+    u->core->mainloop->time_free(u->refresh_time_event);
+    u->refresh_time_event = NULL;
+
+    /* Re-apply whatever route currently is active to HAL. */
+    do_routing(u);
+}
+
 pa_sink *pa_droid_sink_new(pa_module *m,
                              pa_modargs *ma,
                              const char *driver,
@@ -1324,6 +1340,9 @@ pa_sink *pa_droid_sink_new(pa_module *m,
     pa_droid_stream_set_data(u->stream, u->sink);
     pa_sink_put(u->sink);
 
+    if (pa_droid_quirk(u->hw_module, QUIRK_SWAP_HEADPHONE_SPEAKER) && pa_droid_stream_is_primary(u->stream))
+        u->refresh_time_event = pa_core_rttime_new(u->core, pa_rtclock_now() + REFRESH_TIME_US, refresh_time_cb, u);
+
     return u->sink;
 
 fail:
@@ -1353,6 +1372,9 @@ static void parameter_free(droid_parameter_mapping *m) {
 }
 
 static void userdata_free(struct userdata *u) {
+
+    if (u->refresh_time_event)
+        u->core->mainloop->time_free(u->refresh_time_event);
 
     if (u->primary_stream_sink)
         unset_primary_stream_sink(u);
