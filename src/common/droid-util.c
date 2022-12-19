@@ -77,20 +77,21 @@ struct droid_quirk {
 };
 
 struct droid_quirk valid_quirks[] = {
-    { "input_atoi",             QUIRK_INPUT_ATOI            },
-    { "set_parameters",         QUIRK_SET_PARAMETERS        },
-    { "close_input",            QUIRK_CLOSE_INPUT           },
-    { "unload_no_close",        QUIRK_UNLOAD_NO_CLOSE       },
-    { "no_hw_volume",           QUIRK_NO_HW_VOLUME          },
-    { "output_make_writable",   QUIRK_OUTPUT_MAKE_WRITABLE  },
-    { "realcall",               QUIRK_REALCALL              },
-    { "unload_call_exit",       QUIRK_UNLOAD_CALL_EXIT      },
-    { "output_fast",            QUIRK_OUTPUT_FAST           },
-    { "output_deep_buffer",     QUIRK_OUTPUT_DEEP_BUFFER    },
-    { "audio_cal_wait",         QUIRK_AUDIO_CAL_WAIT        },
-    { "standby_set_route",      QUIRK_STANDBY_SET_ROUTE     },
-    { "speaker_before_voice",   QUIRK_SPEAKER_BEFORE_VOICE  },
-    { "swap_headphone_speaker", QUIRK_SWAP_HEADPHONE_SPEAKER},
+    { "input_atoi",                         QUIRK_INPUT_ATOI                        },
+    { "set_parameters",                     QUIRK_SET_PARAMETERS                    },
+    { "close_input",                        QUIRK_CLOSE_INPUT                       },
+    { "unload_no_close",                    QUIRK_UNLOAD_NO_CLOSE                   },
+    { "no_hw_volume",                       QUIRK_NO_HW_VOLUME                      },
+    { "output_make_writable",               QUIRK_OUTPUT_MAKE_WRITABLE              },
+    { "realcall",                           QUIRK_REALCALL                          },
+    { "unload_call_exit",                   QUIRK_UNLOAD_CALL_EXIT                  },
+    { "output_fast",                        QUIRK_OUTPUT_FAST                       },
+    { "output_deep_buffer",                 QUIRK_OUTPUT_DEEP_BUFFER                },
+    { "audio_cal_wait",                     QUIRK_AUDIO_CAL_WAIT                    },
+    { "standby_set_route",                  QUIRK_STANDBY_SET_ROUTE                 },
+    { "speaker_before_voice",               QUIRK_SPEAKER_BEFORE_VOICE              },
+    { "swap_headphone_speaker",             QUIRK_SWAP_HEADPHONE_SPEAKER            },
+    { "output_remix_to_mono",               QUIRK_OUTPUT_REMIX_TO_MONO              },
 };
 
 #define QUIRK_AUDIO_CAL_WAIT_S  (10)
