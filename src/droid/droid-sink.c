@@ -284,8 +284,34 @@ static int thread_write(struct userdata *u) {
     u->write_time = pa_rtclock_now();
 
     for (;;) {
-        if (pa_droid_quirk(u->hw_module, QUIRK_OUTPUT_MAKE_WRITABLE))
+        if (pa_droid_quirk(u->hw_module, QUIRK_OUTPUT_MAKE_WRITABLE) ||
+            pa_droid_quirk(u->hw_module, QUIRK_OUTPUT_REMIX_TO_MONO)) {
             pa_memchunk_make_writable(&c, c.length);
+
+            /* Naive implementation, only works for little-endian 16 bit samples
+             * and causes volume to drop by 6dB.
+             * Do mixing for speaker, headset and headphone only. */
+            if (pa_droid_quirk(u->hw_module, QUIRK_OUTPUT_REMIX_TO_MONO) &&
+                u->primary_devices & (AUDIO_DEVICE_OUT_SPEAKER |
+                                      AUDIO_DEVICE_OUT_WIRED_HEADSET |
+                                      AUDIO_DEVICE_OUT_WIRED_HEADPHONE)) {
+                size_t i;
+                void *dst;
+
+                dst = pa_memblock_acquire_chunk(&c);
+
+                for (i = 0; i < c.length; i += 4) {
+                    int16_t *left = dst;
+                    int16_t *right = dst + 2;
+
+                    *left = *left / 2 + *right / 2;
+                    *right = *left;
+                    dst += 4;
+                }
+
+                pa_memblock_release(c.memblock);
+            }
+        }
 
         p = pa_memblock_acquire_chunk(&c);
         wrote = pa_droid_stream_write(u->stream, p, c.length);
