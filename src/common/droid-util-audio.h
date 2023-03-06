@@ -91,7 +91,7 @@ uint32_t conversion_table_format[][2] = {
     { PA_SAMPLE_U8,             AUDIO_FORMAT_PCM_8_BIT              },
     { PA_SAMPLE_S16LE,          AUDIO_FORMAT_PCM_16_BIT             },
     { PA_SAMPLE_S32LE,          AUDIO_FORMAT_PCM_32_BIT             },
-    { PA_SAMPLE_S24LE,          AUDIO_FORMAT_PCM_8_24_BIT           }
+    { PA_SAMPLE_S24LE,          AUDIO_FORMAT_PCM_24_BIT_PACKED      }
 };
 
 uint32_t conversion_table_default_audio_source[][2] = {
@@ -423,6 +423,7 @@ struct string_conversion string_conversion_table_format[] = {
     STRING_ENTRY( AUDIO_FORMAT_PCM_8_BIT                            ),
     STRING_ENTRY( AUDIO_FORMAT_PCM_32_BIT                           ),
     STRING_ENTRY( AUDIO_FORMAT_PCM_8_24_BIT                         ),
+    STRING_ENTRY( AUDIO_FORMAT_PCM_24_BIT_PACKED                    ),
 
     /* Audio formats which may or may not be defined for all devices,
      * update configure.ac CC_CHECK_DROID_ENUM list if you encounter new ones. */
