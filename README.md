@@ -26,8 +26,8 @@ Supported Android versions:
 Headers for defining devices and strings for different droid versions are in
 src/common/droid-util-audio.h (legacy headers for Jolla 1 in droid-util-41qc.h).
 
-When new devices with relevant new enums appear, add enum check to configure.ac.
-CC_CHECK_DROID_ENUM macro will create macros HAVE_ENUM_FOO, STRING_ENTRY_IF_FOO
+When new devices with relevant new enums appear, add enum check to meson.build.
+Meson build will create macros HAVE_ENUM_FOO, STRING_ENTRY_IF_FOO
 and FANCY_ENTRY_IF_FOO if enum FOO exists in HAL audio.h.
 
 For example:

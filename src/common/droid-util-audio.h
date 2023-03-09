@@ -141,7 +141,7 @@ struct string_conversion string_conversion_table_output_device[] = {
     STRING_ENTRY( AUDIO_DEVICE_OUT_DEFAULT                          ),
 
     /* Devices which may or may not be defined for all devices,
-     * update configure.ac CC_CHECK_DROID_ENUM list if you encounter new ones. */
+     * update meson.build check_enums list if you encounter new ones. */
     STRING_ENTRY_IF_AUDIO_DEVICE_OUT_HDMI
     STRING_ENTRY_IF_AUDIO_DEVICE_OUT_HDMI_ARC
     STRING_ENTRY_IF_AUDIO_DEVICE_OUT_TELEPHONY_TX
@@ -225,7 +225,7 @@ struct string_conversion string_conversion_table_input_device[] = {
     STRING_ENTRY( AUDIO_DEVICE_IN_DEFAULT                           ),
 
     /* Devices which may or may not be defined for all devices,
-     * update configure.ac CC_CHECK_DROID_ENUM list if you encounter new ones. */
+     * update meson.build check_enums list if you encounter new ones. */
     STRING_ENTRY_IF_AUDIO_DEVICE_IN_HDMI
     STRING_ENTRY_IF_AUDIO_DEVICE_IN_TELEPHONY_RX
     STRING_ENTRY_IF_AUDIO_DEVICE_IN_FM_TUNER
@@ -318,7 +318,7 @@ struct string_conversion string_conversion_table_output_flag[] = {
     STRING_ENTRY( AUDIO_OUTPUT_FLAG_DEEP_BUFFER                     ),
 
     /* Audio output flags which may or may not be defined for all devices,
-     * update configure.ac CC_CHECK_DROID_ENUM list if you encounter new ones. */
+     * update meson.build check_enums list if you encounter new ones. */
     STRING_ENTRY_IF_AUDIO_OUTPUT_FLAG_COMPRESS_OFFLOAD
     STRING_ENTRY_IF_AUDIO_OUTPUT_FLAG_NON_BLOCKING
     STRING_ENTRY_IF_AUDIO_OUTPUT_FLAG_HW_AV_SYNC
@@ -335,7 +335,7 @@ struct string_conversion string_conversion_table_output_flag[] = {
 
 struct string_conversion string_conversion_table_input_flag[] = {
     /* Audio output flags which may or may not be defined for all devices,
-     * update configure.ac CC_CHECK_DROID_ENUM list if you encounter new ones. */
+     * update meson.build check_enums list if you encounter new ones. */
     STRING_ENTRY_IF_AUDIO_INPUT_FLAG_NONE
     STRING_ENTRY_IF_AUDIO_INPUT_FLAG_FAST
     STRING_ENTRY_IF_AUDIO_INPUT_FLAG_HW_HOTWORD
@@ -427,7 +427,7 @@ struct string_conversion string_conversion_table_format[] = {
     STRING_ENTRY( AUDIO_FORMAT_PCM_8_24_BIT                         ),
 
     /* Audio formats which may or may not be defined for all devices,
-     * update configure.ac CC_CHECK_DROID_ENUM list if you encounter new ones. */
+     * update meson.build check_enums list if you encounter new ones. */
     STRING_ENTRY_IF_AUDIO_FORMAT_PCM_24_BIT_PACKED
     STRING_ENTRY_IF_AUDIO_FORMAT_PCM_OFFLOAD
     STRING_ENTRY_IF_AUDIO_FORMAT_FLAC
