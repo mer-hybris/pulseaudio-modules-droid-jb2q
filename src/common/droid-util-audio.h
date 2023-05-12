@@ -90,10 +90,11 @@ uint32_t conversion_table_input_channel[][2] = {
 uint32_t conversion_table_format[][2] = {
     { PA_SAMPLE_U8,             AUDIO_FORMAT_PCM_8_BIT              },
     { PA_SAMPLE_S16LE,          AUDIO_FORMAT_PCM_16_BIT             },
-    { PA_SAMPLE_S32LE,          AUDIO_FORMAT_PCM_32_BIT             },
+    { PA_SAMPLE_S24_32LE,       AUDIO_FORMAT_PCM_8_24_BIT           },
 #if HAVE_ENUM_AUDIO_FORMAT_PCM_24_BIT_PACKED
-    { PA_SAMPLE_S24LE,          AUDIO_FORMAT_PCM_24_BIT_PACKED      }
+    { PA_SAMPLE_S24LE,          AUDIO_FORMAT_PCM_24_BIT_PACKED      },
 #endif
+    { PA_SAMPLE_S32LE,          AUDIO_FORMAT_PCM_32_BIT             }
 };
 
 uint32_t conversion_table_default_audio_source[][2] = {
