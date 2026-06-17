@@ -19,6 +19,8 @@ BuildRequires:  pkgconfig(pulsecore) >= %{pulsemajorminor}
 BuildRequires:  pkgconfig(android-headers)
 BuildRequires:  pkgconfig(libhardware)
 BuildRequires:  pkgconfig(expat)
+BuildRequires:  pkgconfig(alsa)
+BuildRequires:  pkgconfig(libudev)
 Provides:   pulseaudio-modules-droid = %{version}
 Obsoletes:  pulseaudio-modules-droid <= 14.2.95
 
