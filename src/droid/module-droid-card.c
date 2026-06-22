@@ -852,12 +852,13 @@ int pa__init(pa_module *m) {
 
     pa_card_choose_initial_profile(u->card);
     init_profile(u);
+
+    pa_card_put(u->card);
+
     u->extcon = pa_droid_extcon_new(m->core, u->card);
 
     if (!u->extcon)
         u->extevdev = pa_droid_extevdev_new(u->card);
-
-    pa_card_put(u->card);
 
     return 0;
 
