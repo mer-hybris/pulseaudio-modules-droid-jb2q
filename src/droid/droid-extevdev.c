@@ -275,7 +275,8 @@ void pa_droid_extevdev_free(pa_droid_extevdev *u) {
     if (!u)
         return;
 
-    u->card->core->mainloop->io_free(u->event);
+    if (u->event)
+        u->card->core->mainloop->io_free(u->event);
 
     pa_xfree(u);
 }
