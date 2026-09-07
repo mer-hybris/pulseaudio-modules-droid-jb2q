@@ -198,7 +198,7 @@ static bool check_device(int fd)
     return true;
 }
 
-static int find_input_device()
+static int find_input_device(const char *name_string)
 {
     DIR *dir;
     struct dirent *de;
@@ -221,12 +221,31 @@ static int find_input_device()
             continue;
         }
 
-        if (check_device(fd)) {
-            pa_log_info("input device found at %s", path);
-            break;
-        } else {
-            close(fd);
-            fd = -1;
+        if (name_string) {
+            char name[256] = {0};
+
+            if (ioctl(fd, EVIOCGNAME(sizeof(name)), name) < 0) {
+                pa_log_warn("Could not get device name: %s", pa_cstrerror(errno));
+                close(fd);
+                fd = -1;
+            } else {
+                if (strstr(name, name_string)) {
+                    pa_log_debug("input device %s matches '%s'", path, name_string);
+                } else {
+                    close(fd);
+                    fd = -1;
+                }
+            }
+        }
+
+        if (fd >= 0) {
+            if (check_device(fd)) {
+                pa_log_info("input device found at %s", path);
+                break;
+            } else {
+                close(fd);
+                fd = -1;
+            }
         }
     }
 
@@ -235,8 +254,29 @@ static int find_input_device()
     return fd;
 }
 
-static bool setup(pa_droid_extevdev *u) {
-    u->fd = find_input_device();
+static int static_input_device(const char *path)  {
+    int fd = -1;
+
+    if ((fd = open(path, O_RDONLY)) < 0) {
+        pa_log("failed to open %s for reading", path);
+        return fd;
+    }
+
+    if (check_device(fd)) {
+        pa_log_info("input device found at %s", path);
+    } else {
+        close(fd);
+        fd = -1;
+    }
+
+    return fd;
+}
+
+static bool setup(const char *evdev_device, const char *evdev_match, pa_droid_extevdev *u) {
+    if (evdev_device)
+        u->fd = static_input_device(evdev_device);
+    else
+        u->fd = find_input_device(evdev_match);
 
     if (u->fd < 0) {
         pa_log("could not start input device detection.");
@@ -254,14 +294,14 @@ static bool setup(pa_droid_extevdev *u) {
     return true;
 }
 
-pa_droid_extevdev *pa_droid_extevdev_new(pa_card *card) {
+pa_droid_extevdev *pa_droid_extevdev_new(const char *evdev_device, const char *evdev_match, pa_card *card) {
     pa_droid_extevdev *u = pa_xnew0(pa_droid_extevdev, 1);
 
     pa_assert(card);
 
     u->card = card;
 
-    if (!setup(u))
+    if (!setup(evdev_device, evdev_match, u))
         goto fail;
 
     return u;

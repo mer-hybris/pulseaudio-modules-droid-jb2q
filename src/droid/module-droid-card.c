@@ -117,6 +117,8 @@ static const char* const valid_modargs[] = {
     "voice_property_key",
     "voice_property_value",
     "voice_virtual_stream",
+    "evdev_device",
+    "evdev_match",
     "default_profile",
     "combine",
     "merge_inputs",
@@ -857,8 +859,11 @@ int pa__init(pa_module *m) {
 
     u->extcon = pa_droid_extcon_new(m->core, u->card);
 
-    if (!u->extcon)
-        u->extevdev = pa_droid_extevdev_new(u->card);
+    if (!u->extcon) {
+        const char *evdev_device = pa_modargs_get_value(ma, "evdev_device", NULL);
+        const char *evdev_match = pa_modargs_get_value(ma, "evdev_match", NULL);
+        u->extevdev = pa_droid_extevdev_new(evdev_device, evdev_match, u->card);
+    }
 
     return 0;
 
