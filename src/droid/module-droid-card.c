@@ -63,6 +63,8 @@
 #include <droid/sllist.h>
 #include "droid-sink.h"
 #include "droid-source.h"
+#include "droid-extcon.h"
+#include "droid-extevdev.h"
 
 PA_MODULE_AUTHOR("Juho Hämäläinen");
 PA_MODULE_DESCRIPTION("Droid card jb2q");
@@ -115,6 +117,8 @@ static const char* const valid_modargs[] = {
     "voice_property_key",
     "voice_property_value",
     "voice_virtual_stream",
+    "evdev_device",
+    "evdev_match",
     "default_profile",
     "combine",
     "merge_inputs",
@@ -159,6 +163,9 @@ struct userdata {
     pa_droid_card_data card_data;
 
     pa_card_profile *real_profile;
+
+    pa_droid_extcon *extcon;
+    pa_droid_extevdev *extevdev;
 
     pa_modargs *modargs;
     pa_card *card;
@@ -847,7 +854,16 @@ int pa__init(pa_module *m) {
 
     pa_card_choose_initial_profile(u->card);
     init_profile(u);
+
     pa_card_put(u->card);
+
+    u->extcon = pa_droid_extcon_new(m->core, u->card);
+
+    if (!u->extcon) {
+        const char *evdev_device = pa_modargs_get_value(ma, "evdev_device", NULL);
+        const char *evdev_match = pa_modargs_get_value(ma, "evdev_match", NULL);
+        u->extevdev = pa_droid_extevdev_new(evdev_device, evdev_match, u->card);
+    }
 
     return 0;
 
@@ -870,9 +886,14 @@ void pa__done(pa_module *m) {
         if (u->card && u->card->sinks)
             pa_idxset_remove_all(u->card->sinks, (pa_free_cb_t) pa_droid_sink_free);
 
+        if (u->extcon)
+            pa_droid_extcon_free(u->extcon);
+
         if (u->card && u->card->sources)
             pa_idxset_remove_all(u->card->sources, (pa_free_cb_t) pa_droid_source_free);
 
+        if (u->extevdev)
+            pa_droid_extevdev_free(u->extevdev);
 
         if (u->card)
             pa_card_free(u->card);
