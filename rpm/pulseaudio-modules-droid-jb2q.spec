@@ -5,7 +5,7 @@
 Name:       pulseaudio-modules-droid-jb2q
 
 Summary:    PulseAudio Droid HAL modules
-Version:    %{pulsemajorminor}.103
+Version:    %{pulsemajorminor}.104
 Release:    1
 License:    LGPLv2+
 URL:        https://github.com/mer-hybris/pulseaudio-modules-droid-jb2q
